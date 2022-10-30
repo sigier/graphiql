@@ -1,5 +1,7 @@
 const { User } = require("../../models/user");
-const { UserInputError, AuthenticationError, ApolloError } = require("apollo-server-express");
+const {  AuthenticationError } = require("apollo-server-express");
+const authorize = require('../../util/isAuth');
+const { userOwnership } = require("../../util/tools");
 
 module.exports = {
     Mutation:{
@@ -45,6 +47,31 @@ module.exports = {
                 if (err.code === 11000){
                     throw new AuthenticationError("duplicated email used!");
                 }
+            }
+        
+        },
+        updateUserProfile: async(parent, args, context, info) => {
+            try {
+                const req = authorize(context.req);
+
+                if(!userOwnership(req, args._id)){
+                    throw new AuthenticationError("Not your user!");
+                }
+
+                const user = await User.findOneAndUpdate(
+                    {_id:args._id},
+                    {
+                        "$set": {
+                            name: args.name,
+                            lastname: args.lastname
+                        }
+                    },
+                    {new: true}
+                );
+                
+                return {...user._doc};
+            } catch (err) {
+                throw err;
             }
         }
     }
