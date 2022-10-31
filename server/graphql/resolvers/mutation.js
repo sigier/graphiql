@@ -1,4 +1,5 @@
 const { User } = require("../../models/user");
+const { Post } = require("../../models/post");
 const {  AuthenticationError, ApolloError } = require("apollo-server-express");
 const authorize = require('../../util/isAuth');
 const { userOwnership } = require("../../util/tools");
@@ -107,6 +108,24 @@ module.exports = {
                 
             } catch (err) {
                 throw new ApolloError("No user found!", err);
+            }
+        },
+        createPost: async(parent, { fields }, context, info) => {
+            try {
+                const req = authorize(context.req);
+                const post = new Post({
+                    title: fields.title,
+                    excerpt: fields.excerpt,
+                    content: fields.content,
+                    author: req._id,
+                    status: fields.status
+                });
+
+                const result = await post.save();
+                return {...result._doc};
+
+            } catch (err) {
+                throw err;
             }
         }
     }
