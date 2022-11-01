@@ -1,5 +1,7 @@
 const { User } = require("../../models/user");
 const { Post } = require("../../models/post");
+const { Category } = require("../../models/category");
+
 const {  AuthenticationError, ApolloError } = require("apollo-server-express");
 const authorize = require('../../util/isAuth');
 const { userOwnership } = require("../../util/tools");
@@ -119,6 +121,21 @@ module.exports = {
                     content: fields.content,
                     author: req._id,
                     status: fields.status
+                });
+
+                const result = await post.save();
+                return {...result._doc};
+
+            } catch (err) {
+                throw err;
+            }
+        },
+        createCategory: async(parent, args, context, info) => {
+            try {
+                const req = authorize(context.req);
+                const category = new Category({
+                    name: args.name,
+                    author: req._id,
                 });
 
                 const result = await post.save();
