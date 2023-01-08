@@ -20,7 +20,12 @@ const categorySchema = mongoose.Schema({
         type: String,
         enum: ['DRAFT','PUBLIC'],
         default: 'DRAFT'
-    }
+    },
+    category:{
+        type: schema.Types.ObjectId,
+        ref: 'Category',
+        require: true
+    },
 
 },{timestamp: {createdAt: 'created_at', updatedAt: 'updated_at'}});
 

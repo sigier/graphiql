@@ -4,6 +4,7 @@ const typeDefs = gql `
     type Query {
         user(id:ID!):User!
         isAuth:User!
+        categories(catId: ID!):[Category]!
     }
 
     type Mutation {
@@ -24,6 +25,7 @@ const typeDefs = gql `
         updated_at: String
         author: User!
         status: PostStatus
+        category: Category
     }
 
     type User {
@@ -32,7 +34,9 @@ const typeDefs = gql `
         password:String
         name:String
         lastname:String
-        token:String
+        token:String,
+        posts:[Post!]!,
+        categories:[Categoty!]!
     }
 
     type Category {
@@ -51,7 +55,8 @@ const typeDefs = gql `
         title: String
         excerpt: String
         content: String
-        status: PostStatus
+        status: PostStatus,
+        category: ID
     }
 
     enum PostStatus {
