@@ -1,5 +1,10 @@
 const { User } = require("../../models/user");
-const { UserInputError, AuthenticationError, ApolloError } = require("apollo-server-express");
+const { Post } = require("../../models/post");
+const { Category } = require("../../models/category");
+
+const {  AuthenticationError, ApolloError } = require("apollo-server-express");
+const authorize = require('../../util/isAuth');
+const { userOwnership } = require("../../util/tools");
 
 module.exports = {
     Mutation:{
@@ -45,6 +50,100 @@ module.exports = {
                 if (err.code === 11000){
                     throw new AuthenticationError("duplicated email used!");
                 }
+            }
+        
+        },
+        updateUserProfile: async(parent, args, context, info) => {
+            try {
+                const req = authorize(context.req);
+
+                if(!userOwnership(req, args._id)){
+                    throw new AuthenticationError("Not your user!");
+                }
+
+                const user = await User.findOneAndUpdate(
+                    {_id:args._id},
+                    {
+                        "$set": {
+                            name: args.name,
+                            lastname: args.lastname
+                        }
+                    },
+                    {new: true}
+                );
+                
+                return {...user._doc};
+            } catch (err) {
+                throw err;
+            }
+  
+        },
+        updateUserEmailPass: async(parent, args, context, info) => {
+            try {
+                const req = authorize(context.req);
+
+                if(!userOwnership(req, args._id)){
+                    throw new AuthenticationError("Not your user!");
+                }
+                const user = await User.findOne({_id: req._id});
+
+                if(!user){
+                    throw new AuthenticationError("No user found!");
+                }
+                
+                if(args.email) { 
+                    user.email = args.email;
+                }
+
+                if(args.password) { 
+                    user.password = args.password;
+                }
+
+                const getToken = await user.generateToken();
+
+                if(!getToken){
+                    throw new AuthenticationError("No user found!");
+                }
+
+                return {...getToken._doc, token: getToken.token};
+
+                
+            } catch (err) {
+                throw new ApolloError("No user found!", err);
+            }
+        },
+        createPost: async(parent, { fields }, context, info) => {
+            try {
+                const req = authorize(context.req);
+                const post = new Post({
+                    title: fields.title,
+                    excerpt: fields.excerpt,
+                    content: fields.content,
+                    author: req._id,
+                    status: fields.status,
+                    category: fields.category
+                });
+
+                const result = await post.save();
+                return {...result._doc};
+
+            } catch (err) {
+                throw err;
+            }
+        },
+        createCategory: async(parent, args, context, info) => {
+            try {
+                const req = authorize(context.req);
+                const category = new Category({
+                    name: args.name,
+                    author: req._id,
+                });
+
+                const result = await post.save();
+                return {...result._doc};
+
+            } catch (err) {
+                throw err;
             }
         }
     }
