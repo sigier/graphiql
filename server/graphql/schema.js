@@ -3,6 +3,8 @@ const { gql } = require("apollo-server-express");
 const typeDefs = gql `
     type Query {
         user(id:ID!):User!
+        post(id:ID!):Post!
+        posts(sort: SortInput, queryBy: QueryByInput):[Post]
         isAuth:User!
         categories(catId: ID!):[Category]!
     }
@@ -57,6 +59,22 @@ const typeDefs = gql `
         content: String
         status: PostStatus,
         category: ID
+    }
+
+    input SortInput {
+        sortBy: String
+        order: String
+        limit: Int
+        skip: Int
+    }
+
+    input QueryByInput {
+        key: String!
+        value: String!
+    }
+
+    input QueryByInput {
+
     }
 
     enum PostStatus {
