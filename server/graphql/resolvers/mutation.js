@@ -145,6 +145,42 @@ module.exports = {
             } catch (err) {
                 throw err;
             }
+        },
+        updatePost: async(parent, { fields, postId }, context, info) => {
+            try {
+                const req = authorize(context.req);
+                const post = await Post.findOne({'_id': postId});
+
+                if (!userOwnership(req, post.author)){
+                    throw new AuthenticationError('Not authorized');
+                }
+
+                for (const key in fields) {
+                    if (post[key] != fields[key]) {
+                        post[key]=fields[key];
+                    }
+                }
+
+                const result = await post.save();
+
+                return {...result._doc};
+                
+            } catch (error) {
+                throw error;
+            }
+        },
+        deletePost: async(parent, { postId }, context, info) => {
+            try {
+                const post = await Post.findByIdAndRemove(postId);
+                if (!post){
+                    throw new UserInputError('Post not found');
+                }
+
+                return post;
+                
+            } catch (error) {
+                throw error;
+            }
         }
     }
 }

@@ -15,7 +15,10 @@ const typeDefs = gql `
         authUser(fields: AuthInput!):User!
         signUp(fields: AuthInput!):User!
         createPost(fields: PostInput!):Post!
+        updatePost(fields: PostInput!, postId: ID!): Post!
+        deletePost(postId: ID!): Post
         createCategory(name: String!): Category!
+        
     }
 
     type Post {
@@ -37,8 +40,9 @@ const typeDefs = gql `
         name:String
         lastname:String
         token:String,
-        posts:[Post!]!,
+        posts(sort:sortInput):[Post!]!
         categories:[Categoty!]!
+        related: (sort: sortInput): [Post!]
     }
 
     type Category {
