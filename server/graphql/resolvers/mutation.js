@@ -181,6 +181,32 @@ module.exports = {
             } catch (error) {
                 throw error;
             }
+        },
+        updateCategory: async(parent, { catId, name }, context, info) => {
+            try {
+                const category = await Category.findOneAndUpdate({_id: catId}, {"$set":{name}}, {new : true});
+
+                if (!category){
+                    throw new UserInputError('Category not found');
+                }
+
+                return category;
+
+            } catch (error) {
+                throw error;
+
+            }
+        },
+        deleteCategory: async(parent, { catId }, context, info) => {
+            try {
+                const category = await Category.findByIdAndRemove( catId);
+
+                return {...category._doc};
+
+            } catch (error) {
+                throw error;
+
+            }
         }
     }
 }
