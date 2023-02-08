@@ -4,6 +4,8 @@ import { Container } from "react-bootstrap";
 import Home from "./components/home";
 import Header from "./components/header";
 import UserAccess from "./components/userArea/access";
+import { ToastContainer } from "react-toastify";
+
 
 class Routes extends Component{
     render () {
@@ -15,6 +17,7 @@ class Routes extends Component{
                     <Route path="/sign_in" component={UserAccess}/>
                 </Switch>
             </Container>
+            <ToastContainer/>
             </BrowserRouter>)
 
     }    
