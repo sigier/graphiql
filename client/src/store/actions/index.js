@@ -14,3 +14,12 @@ export const autoSignin = () => ({
     type:'AUTH_USER',
     payload: api.autoSignin()
 });
+
+export const logoutUser = () => {
+
+    localStorage.removeItem('X-AUTH');
+
+   return  {
+    type:'AUTH_USER',
+    payload: {auth: null}
+}};
