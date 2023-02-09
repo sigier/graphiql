@@ -1,14 +1,14 @@
 import React from "react";
-import UserArea from "../hoc/userArea";
+import UserArea from "../../hoc/userArea";
 
-const UserArea = () => {
+const Profile = () => {
     return(
         <UserArea>
             <div className="mt-3">
-                Welcome to your user area
+            Profile
             </div>
         </UserArea>
     )
 }
 
-export default UserArea;
+export default Profile;
