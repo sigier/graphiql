@@ -5,11 +5,13 @@ import Home from "./components/home";
 import Header from "./components/header";
 import UserAccess from "./components/userArea/access";
 import { ToastContainer } from "react-toastify";
+import AutoSignin from "./components/hoc/autoSignin";
 
 
 class Routes extends Component{
     render () {
         return(<BrowserRouter>
+        <AutoSignin>
             <Header/>
             <Container className="mt-4">
                 <Switch>
@@ -18,6 +20,7 @@ class Routes extends Component{
                 </Switch>
             </Container>
             <ToastContainer/>
+            </AutoSignin>
             </BrowserRouter>)
 
     }    

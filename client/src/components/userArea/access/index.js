@@ -3,7 +3,7 @@ import { Form, Alert, Col, Row, Button } from "react-bootstrap";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useDispatch } from "react-redux";
-import { signupUser } from "../../../store/actions";
+import { signupUser, loginUser } from "../../../store/actions";
 import axios from "axios";
 import ToastHandler from "../../utils/toasts";
 
@@ -12,7 +12,7 @@ const UserAccess = (props) => {
 
     const [type, setType] = useState(true);
 
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
 
     const switchTypeHandler = () => {
         setType(!type);
@@ -20,6 +20,9 @@ const UserAccess = (props) => {
 
     const onSubmitHandler = (values) => {
         if (type) {
+            dispatch(loginUser(values)).then(({payload}) =>{
+                successHandler(payload);
+            });
             
         } else {
             dispatch(signupUser(values)).then(({payload}) =>{
@@ -58,6 +61,11 @@ const UserAccess = (props) => {
             onSubmitHandler(values);
         }
     });
+
+    useEffect(() => {
+
+        return function cleanup()
+    },[]);
 
     return (
         <>

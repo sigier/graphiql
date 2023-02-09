@@ -33,4 +33,62 @@ export const signupUser = async (userData) => {
     } catch (error) {
         throw error;
     }
+};
+
+export const loginUser = async (userData) => {
+
+    try {
+
+        const {data} = await axios({data: {
+                query:  `mutation{
+                    authUser(
+                        fields: {
+                            email: "${userData.email}"
+                            password: "${userData.password}"
+                        }
+                    ) {
+                        _id
+                        email
+                        token
+                    } 
+                }`
+        }});
+         
+        return {
+            auth: data.data ? data.data.authUser : null,
+            errors: data.errors
+        };
+        
+    } catch (error) {
+        throw error;
+    }
+};
+
+export const autoSignin = async () => {
+
+    try {
+
+        const {data} = await axios({data: {
+                query:  `mutation{
+                    isAuth(
+                    ) {
+                        _id
+                        email
+                        token
+                    } 
+                }`
+        }});
+
+        if (data.errors) {
+            localStorage.removeItem('X-AUTH');
+        }
+         
+        return {
+            auth: data.data ? data.data.isAuth : null,
+            errors: data.errors
+        };
+        
+    } catch (error) {
+        throw error;
+    }
 }
