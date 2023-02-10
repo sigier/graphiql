@@ -10,6 +10,7 @@ import UserArea from "./components/hoc/userArea";
 import Profile from "./components/userArea/profile";
 import Articles from "./components/userArea/articles";
 import CreateArticle from "./components/userArea/articles/create";
+import Auth from "./components/hoc/auth";
 
 
 class Routes extends Component{
@@ -21,10 +22,10 @@ class Routes extends Component{
                 <Switch>
                     <Route path="/" component={Home}/>
                     <Route path="/sign_in" component={UserAccess}/>
-                    <Route path="/user_area/profile" component={Profile}/>
-                    <Route path="/user_area/create" component={CreateArticle}/>
-                    <Route path="/user_area/articles" component={Articles}/>
-                    <Route path="/user_area" component={UserArea}/>
+                    <Route path="/user_area/profile" component={Auth(Profile)}/>
+                    <Route path="/user_area/create" component={Auth(CreateArticle)}/>
+                    <Route path="/user_area/articles" component={Auth(Articles)}/>
+                    <Route path="/user_area" component={Auth(UserArea)}/>
                 </Switch>
             </Container>
             <ToastContainer/>
