@@ -91,4 +91,46 @@ export const autoSignin = async () => {
     } catch (error) {
         throw error;
     }
-}
+};
+
+
+export const getUserStats = async (id) => {
+
+    try {
+
+        const body = {
+            query:`
+                query User($id:ID!, $sort:SortInput){
+                    user(Id:$id){
+                        name
+                        lastname
+                        posts(sort:$sort) {_id, title}
+                        categories {name}
+                    }
+                }
+            `,
+            variables: {
+                id: id,
+                sort: {
+                    sortBy: "_id",
+                    order: "desc",
+                    limit: 3
+
+                }
+            }
+
+        };
+        const {data} = await axios({data: JSON.stringify(body);
+                
+        });
+
+        
+         
+        return {
+            stats: data.data ? data.data.user : null
+        };
+        
+    } catch (error) {
+        throw error;
+    }
+};

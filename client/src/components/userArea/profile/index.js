@@ -1,12 +1,11 @@
 import React from "react";
 import UserArea from "../../hoc/userArea";
+import Stats from "./stats";
 
-const Profile = () => {
+const Profile = (props) => {
     return(
         <UserArea>
-            <div className="mt-3">
-            Profile
-            </div>
+            <Stats {...props}></Stats>
         </UserArea>
     )
 }
