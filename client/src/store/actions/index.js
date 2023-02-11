@@ -71,3 +71,11 @@ export const clearCreatePost = (args) => {
      type:'USER_POSTS',
      payload: api.removePost(id, state)
  }};
+
+
+ export const getPosts = (sort, state) => {
+
+    return  {
+     type:'GET_POSTS',
+     payload: api.getPosts(sort, state)
+ }};
