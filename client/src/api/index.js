@@ -91,4 +91,104 @@ export const autoSignin = async () => {
     } catch (error) {
         throw error;
     }
-}
+};
+
+
+export const getUserStats = async (id) => {
+
+    try {
+
+        const body = {
+            query:`
+                query User($id:ID!, $sort:SortInput){
+                    user(Id:$id){
+                        name
+                        lastname
+                        posts(sort:$sort) {_id, title}
+                        categories {name}
+                    }
+                }
+            `,
+            variables: {
+                id: id,
+                sort: {
+                    sortBy: "_id",
+                    order: "desc",
+                    limit: 3
+
+                }
+            }
+
+        };
+        const {data} = await axios({data: JSON.stringify(body);
+                
+        });
+
+        
+         
+        return {
+            stats: data.data ? data.data.user : null
+        };
+        
+    } catch (error) {
+        throw error;
+    }
+};
+
+export const getCategories = async () => {
+
+    try {
+        const body = {
+            query: `
+                query {
+                    categories {
+                        _id
+                        name
+                    }
+                }
+            `
+        };
+
+        const {data} = await axios ({
+            data: JSON.stringify(body)
+        });
+
+        return data;
+        
+
+    } catch (error) {
+        throw error;
+    }
+}; 
+
+
+export const createPost = async (args) => {
+
+    try {
+        const body = {
+            query: `
+                mutation CreatePost($fields: PostInput!) {
+                    createPost(fields:$fields){
+                        _id
+                        title
+                    }
+                }
+            `,
+            variables: {
+                fields: args
+            }
+        };
+
+        const {data} = await axios({data: JSON.stringify(body)});
+     
+
+        return {createPost:{
+            post: data.data ? data.data.createPost : null,
+            error: data.errors
+        }};
+        
+
+    } catch (error) {
+        throw error;
+    }
+}; 

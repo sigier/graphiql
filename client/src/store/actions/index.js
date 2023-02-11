@@ -20,6 +20,29 @@ export const logoutUser = () => {
     localStorage.removeItem('X-AUTH');
 
    return  {
-    type:'AUTH_USER',
-    payload: {auth: null}
+    type:'LOGOUT_USER',
+    payload: null
 }};
+
+
+export const getUserStats = (id) => {
+
+   return  {
+    type:'USER_STATS',
+    payload: api.getUserStats()
+}};
+
+
+export const createPost = (args) => {
+
+   return  {
+    type:'POST_CREATE',
+    payload: api.createPost(args)
+}};
+
+export const clearCreatePost = (args) => {
+
+    return  {
+     type:'POST_CREATE',
+     payload: {createdPost: null}
+ }};
