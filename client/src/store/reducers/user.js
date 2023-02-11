@@ -4,6 +4,7 @@ export default function(state={}, action) {
         case 'USER_STATS':
         case 'POST_CREATE':
         case 'USER_POSTS':
+        case 'UPDATE_POST':
             return {...state, ...action.payload};
 
         case 'LOGOUT_STATS':

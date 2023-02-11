@@ -20,6 +20,11 @@ const Articles = (props) => {
         dispatch(getUserPosts(sort,[], user.auth._id));
     });
 
+    const updateStatusHandler = (item) => {
+        const status = item.status === 'DRAFT' ? 'PUBLIC' : 'DRAFT';
+
+        dispatch(updatePostStatus(status, item._id, user.posts));
+    };
     
 
     return(
@@ -55,7 +60,7 @@ const Articles = (props) => {
                                 <td>
                                     {item.category.name}
                                 </td>
-                                <td className={item.status === 'DRAFT' ? 'yell' : 'green'}>
+                                <td className={item.status === 'DRAFT' ? 'yell' : 'green'} onClick={()=> updateStatusHandler(item)}>
                                     {item.status}
                                 </td>
                                 <td className="remove_btn">

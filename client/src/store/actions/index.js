@@ -54,3 +54,11 @@ export const clearCreatePost = (args) => {
      type:'USER_POSTS',
      payload: api.getUserPosts(sort, prevState, id)
  }};
+
+
+ export const updatePostStatus = (status, postId, state) => {
+
+    return  {
+     type:'UPDATE_POST',
+     payload: api.updatePostStatus(status, postId, state)
+ }};
