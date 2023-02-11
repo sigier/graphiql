@@ -11,6 +11,7 @@ import Profile from "./components/userArea/profile";
 import Articles from "./components/userArea/articles";
 import CreateArticle from "./components/userArea/articles/create";
 import Auth from "./components/hoc/auth";
+import Articles from "./components/userArea/articles";
 
 
 class Routes extends Component{
@@ -22,6 +23,7 @@ class Routes extends Component{
                 <Switch>
                     <Route path="/" component={Home}/>
                     <Route path="/sign_in" component={UserAccess}/>
+                    <Route path="/article/:id" component={Articles}/>
                     <Route path="/user_area/profile" component={Auth(Profile)}/>
                     <Route path="/user_area/create" component={Auth(CreateArticle)}/>
                     <Route path="/user_area/articles" component={Auth(Articles)}/>
