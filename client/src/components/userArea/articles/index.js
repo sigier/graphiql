@@ -3,7 +3,7 @@ import React, { useReducer, useEffect } from "react";
 import UserArea from "../../hoc/userArea";
 import { Table, Button} from "react-bootstrap";
 import { useDispatch, useSelector} from "react-redux";
-import { getUserPosts } from "../../../store/actions";
+import { getUserPosts,updatePostStatus, removePost } from "../../../store/actions";
 
 const Articles = (props) => {
 
@@ -63,7 +63,9 @@ const Articles = (props) => {
                                 <td className={item.status === 'DRAFT' ? 'yell' : 'green'} onClick={()=> updateStatusHandler(item)}>
                                     {item.status}
                                 </td>
-                                <td className="remove_btn">
+                                <td className="remove_btn" onClick={()=>{
+                                    dispatch(removePost(item._id, user.posts));
+                                }}>
                                     Remove
                                 </td>
                             </tr>
