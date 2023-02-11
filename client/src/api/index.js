@@ -192,3 +192,169 @@ export const createPost = async (args) => {
         throw error;
     }
 }; 
+
+
+export const getUserPosts = async (sort, prevState, id) => {
+
+    try {
+        const body = {
+            query: `
+                query GetUserPosts($sort: SortInput, $queryBy: QueryByInput) {
+                    posts(sort: $sort, queryBy:queryBy){
+                        id
+                        status
+                        title
+                        category { name }
+                    }
+                }
+            `,
+
+            variables: {
+                queryBy:{key: "author", value: id},
+                sort:sort
+            }
+
+        };
+
+        const {data} = await axios({data: JSON.stringify(body)});
+     
+        let newState;
+        let newPosts = data.data ? data.data.posts : null;
+
+        if (newPosts){
+            newState = [...prevState, ...newPosts];
+        }
+
+        return {
+            posts: data.data ? newState : null
+
+        };
+
+    } catch (error) {
+        throw error;
+    }
+}; 
+
+
+export const updatePostStatus = async (status, postId, state) => {
+
+    try {
+        const body = {
+            query: `
+                mutation UpdatePost($fields: PostInput!, $postId: ID!) {
+                        updatePost(fields: $fields, postId: $postId){
+                            id
+                            status
+                            title
+                            category { name }
+                        }
+                }
+            
+            `,
+            variables: {postId:postId, fields: {status: status}}
+        };
+            
+
+        const {data} = await axios({data: JSON.stringify(body)});
+
+        let newState = null;
+        let updatePost = data.data ? data.data.updatePost : null;
+
+        if(updatePost){
+            newState = prevState.map((old) =>{
+                return [updatePost].find(newObject => newObject._id === old._id) || old;
+            });
+        }
+
+        return {
+            posts: newState ? newState : prevState
+        };
+
+    } catch (error) {
+        throw error;
+    }
+}; 
+
+
+
+export const removePost = async (id, prevState) => {
+
+    try {
+        const body = {
+            query: `
+                mutation {
+                    deletePost(postId: "${id}"){
+                        _id
+                        
+                    }
+                }
+            
+            `
+        };
+            
+        const {data} = await axios({data: JSON.stringify(body)});
+
+        let newState = null;
+        let deletePost = data.data ? data.data.deletePost : null;
+
+        if(deletePost){
+            newState = prevState.filter (obj =>{
+                return obj._id !== deletePost._id
+            });
+        }
+
+        return {
+            posts: newState ? newState : prevState
+        };
+      
+
+    } catch (error) {
+        throw error;
+    }
+};
+
+
+export const getPosts = async (sort, prevState) => {
+
+    try {
+        const body = {
+            query: `
+                query GetPosts($sort: SortInput, $queryBy: QueryByInput) {
+                    posts(sort: $sort, queryBy:queryBy){
+                        id
+                        content
+                        title
+                        category { name }
+                        author { name lastname }
+                        excerpt
+                    }
+                }
+            `,
+
+            variables: {
+                queryBy:{key: "status", value: 'PUBLIC'},
+                sort:sort
+            }
+
+        };
+
+        const {data} = await axios({data: JSON.stringify(body)});
+     
+        let newState;
+        let newPosts = data.data ? data.data.posts : null;
+
+        if (newPosts){
+            newState = [...prevState, ...newPosts];
+        }
+
+        return {
+            homePosts: data.data ? newState : null
+
+        };
+
+    } catch (error) {
+        throw error;
+    }
+}; 
+
+

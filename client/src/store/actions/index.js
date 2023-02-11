@@ -46,3 +46,36 @@ export const clearCreatePost = (args) => {
      type:'POST_CREATE',
      payload: {createdPost: null}
  }};
+
+
+ export const getUserPosts = (sort, prevState, id) => {
+
+    return  {
+     type:'USER_POSTS',
+     payload: api.getUserPosts(sort, prevState, id)
+ }};
+
+
+ export const updatePostStatus = (status, postId, state) => {
+
+    return  {
+     type:'UPDATE_POST',
+     payload: api.updatePostStatus(status, postId, state)
+ }};
+
+
+ 
+ export const removePost = (id, state) => {
+
+    return  {
+     type:'USER_POSTS',
+     payload: api.removePost(id, state)
+ }};
+
+
+ export const getPosts = (sort, state) => {
+
+    return  {
+     type:'GET_POSTS',
+     payload: api.getPosts(sort, state)
+ }};
