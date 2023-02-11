@@ -46,3 +46,11 @@ export const clearCreatePost = (args) => {
      type:'POST_CREATE',
      payload: {createdPost: null}
  }};
+
+
+ export const getUserPosts = (sort, prevState, id) => {
+
+    return  {
+     type:'USER_POSTS',
+     payload: api.getUserPosts(sort, prevState, id)
+ }};
