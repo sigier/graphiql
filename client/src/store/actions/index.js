@@ -27,9 +27,22 @@ export const logoutUser = () => {
 
 export const getUserStats = (id) => {
 
-    localStorage.removeItem('X-AUTH');
-
    return  {
     type:'USER_STATS',
     payload: api.getUserStats()
 }};
+
+
+export const createPost = (args) => {
+
+   return  {
+    type:'POST_CREATE',
+    payload: api.createPost(args)
+}};
+
+export const clearCreatePost = (args) => {
+
+    return  {
+     type:'POST_CREATE',
+     payload: {createdPost: null}
+ }};
